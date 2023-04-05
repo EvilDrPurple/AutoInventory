@@ -10,7 +10,12 @@ URL = 'https://fedsso.yum.com/idp/startSSO.ping?PartnerSpId=https://yumph.altame
 USER = config.USER
 PASS = config.PASS
 DATE = '04/02/2023'
-TYPE = 'Weekly'
+FREQ = 'Weekly'
+
+def wait_for_load():
+    while browser.find_by_id('loading_layer').visible:
+        print("Waiting...")
+        time.sleep(0.5)
 
 # Visit portal and log in
 browser.visit(URL)
@@ -28,9 +33,29 @@ for tag in browser.find_by_tag('h3'):
         tag.click()
         break
 
-while browser.find_by_id('loading_layer').visible:
-    time.sleep(0.5)
+wait_for_load()
+
 browser.find_by_text('Shortcuts').click()
-browser.find_by_text('Inventory').click()
+for tag in browser.find_by_css('.style3'):
+    if tag.text == "Inventory":
+        tag.click()
+        break
+
+wait_for_load()
 
 # Find correct inventory sheet
+browser.find_by_css('.controls').click()
+for link in browser.find_by_tag('li').links.find_by_text(FREQ):
+    if link.visible:
+        link.click()
+browser.find_by_name('DATE_2').fill(DATE)
+browser.find_by_value('GO').click()
+
+wait_for_load()
+
+for link in browser.find_by_name('openObject'):
+    if link.visible:
+        link.click()
+
+wait_for_load()
+

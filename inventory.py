@@ -19,7 +19,6 @@ browser = Browser()
 
 def wait_for_load():
     while browser.find_by_id('loading_layer').visible:
-        print("Waiting...")
         time.sleep(0.5)
 
 # Visit portal and log in
@@ -62,8 +61,12 @@ for link in browser.find_by_name('openObject'):
 
 wait_for_load()
 
+log = open('log.txt', 'a')
+log.truncate(0)
+log.write("Log start\n\n")
+
 # Cycle through spreadsheet and enter data
-for row in sheet.iter_rows(min_row=6, max_row=7, min_col=0, max_col=8):
+for row in sheet.iter_rows(min_row=6, max_row=115, min_col=0, max_col=8):
     skip = False
     for cell in row:
         match cell.column_letter:
@@ -88,5 +91,9 @@ for row in sheet.iter_rows(min_row=6, max_row=7, min_col=0, max_col=8):
     for td in browser.find_by_id('INV_ACC_DETAIL_tbl').find_by_tag('td'):
         if td.text in itemUnit: 
             prev.find_by_tag('input').fill(itemCount)
+            log.write(f"ADDED: {itemCode : <12}{itemDesc : <28}{itemCount} {itemUnit}\n")
             break
         prev = td
+
+log.write("\nLog closed")
+log.close()

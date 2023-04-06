@@ -11,7 +11,8 @@ DATE = '04/02/2023'
 FREQ = 'Weekly'
 PATH = pathlib.Path(__file__).parent.resolve().__str__()
 DICT = {'EACH': {'DISK', 'EACH'},
-        'BTL': 'BOTTLE'}
+        'BTL': 'BOTTLE',
+        'GAL': 'GALLON'}
 
 wb = load_workbook(filename = PATH + "/march 27-april 2.xlsx")
 sheet = wb.active
@@ -88,12 +89,16 @@ for row in sheet.iter_rows(min_row=6, max_row=115, min_col=0, max_col=8):
     if skip: continue
     
     browser.find_by_id('INV_ACC_DETAIL_tbl_filter').find_by_tag('input').fill(itemCode)
+    found = False
+    logString = f"{itemCode : <12}{itemDesc : <30}{itemCount} {itemUnit}"
     for td in browser.find_by_id('INV_ACC_DETAIL_tbl').find_by_tag('td'):
-        if td.text in itemUnit: 
+        if td.text != "" and td.text in itemUnit:
             prev.find_by_tag('input').fill(itemCount)
-            log.write(f"ADDED: {itemCode : <12}{itemDesc : <28}{itemCount} {itemUnit}\n")
+            log.write(f"ADDED: {logString}\n")
+            found = True
             break
         prev = td
+    if not found: log.write(f"ERROR: {logString}  WAS NOT FOUND\n")
 
 log.write("\nLog closed")
 log.close()

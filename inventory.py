@@ -42,6 +42,25 @@ def find_and_click(items, search_type, search_text = ''):
             item.click()
             break
 
+class Item:
+    def __str__(self):
+        return f"{self.itemCode : <12}{self.itemDesc : <30}{self.itemCount} {self.itemUnit}"
+
+    def parse_row(self, row):
+        for cell in row:
+            match cell.column_letter:
+                case "A":
+                    if cell.value is None: return False
+                    self.itemCode = cell.value.strip()
+                case "B":
+                    self.itemDesc = cell.value.strip()
+                case "C":
+                    self.itemUnit = cell.value.strip()
+                    self.itemUnit = UNITS[self.itemUnit] if itemUnit in UNITS else self.itemUnit
+                case "H":
+                    if cell.value is None: return False
+                    self.itemCount = cell.value
+
 if __name__ == '__main__':
     # Visit portal and log in
     browser.visit(URL)
@@ -107,7 +126,7 @@ if __name__ == '__main__':
         found = False
         logString = f"{itemCode : <12}{itemDesc : <30}{itemCount} {itemUnit}"
         for td in browser.find_by_id('INV_ACC_DETAIL_tbl').find_by_tag('td'):
-            if td.text != '' and td.text in itemUnit:
+            if td.text and td.text in itemUnit:
                 prev.find_by_tag('input').fill(itemCount)
                 log.write(f"ADDED: {logString}\n")
                 found = True

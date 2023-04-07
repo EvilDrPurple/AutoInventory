@@ -28,9 +28,19 @@ else:
 wb = load_workbook(filename = PATH + '/' + FILE)
 sheet = wb.active
 
+log = open('log.txt', 'a')
+log.truncate(0)
+log.write("Log start\n\n")
+
 def wait_for_load():
     while browser.find_by_id('loading_layer').visible:
         time.sleep(0.5)
+
+def find_and_click(items, search_type, search_text = ''):
+    for item in items:
+        if search_type == 'text' and item.text == search_text or search_type == 'visible' and item.visible:
+            item.click()
+            break
 
 # Visit portal and log in
 browser.visit(URL)
@@ -44,43 +54,31 @@ while not browser.url.endswith('erslaunch-app'):
     time.sleep(1)
 
 # Navigate to inventory page
-for tag in browser.find_by_tag('h3'):
-    if tag.text == "Enterprise Office":
-        tag.click()
-        break
+items = browser.find_by_tag('h3')
+find_and_click(items=items, search_type='text', search_text='Enterprise Office')
 
 wait_for_load()
 
 browser.find_by_text('Shortcuts').click()
-for tag in browser.find_by_css('.style3'):
-    if tag.text == "Inventory":
-        tag.click()
-        break
+items = browser.find_by_css('.style3')
+find_and_click(items=items, search_type='text', search_text='Inventory')
 
 wait_for_load()
 
 # Find correct inventory sheet
 browser.find_by_css('.controls').click()
-for link in browser.find_by_tag('li').links.find_by_text(FREQ):
-    if link.visible: 
-        link.click()
-        break
+items = browser.find_by_tag('li').links.find_by_text(FREQ)
+find_and_click(items=items, search_type='visible')
 browser.find_by_name('DATE_2').fill(DATE)
 browser.find_by_name('DATE_3').fill(DATE)
 browser.find_by_value('GO').click()
 
 wait_for_load()
 
-for link in browser.find_by_name('openObject'):
-    if link.visible: 
-        link.click()
-        break
+items = browser.find_by_name('openObject')
+find_and_click(items=items, search_type='visible')
 
 wait_for_load()
-
-log = open('log.txt', 'a')
-log.truncate(0)
-log.write("Log start\n\n")
 
 # Cycle through spreadsheet and enter data
 for row in sheet.iter_rows(min_row=6, max_row=115, min_col=0, max_col=8):
@@ -108,7 +106,7 @@ for row in sheet.iter_rows(min_row=6, max_row=115, min_col=0, max_col=8):
     found = False
     logString = f"{itemCode : <12}{itemDesc : <30}{itemCount} {itemUnit}"
     for td in browser.find_by_id('INV_ACC_DETAIL_tbl').find_by_tag('td'):
-        if td.text != "" and td.text in itemUnit:
+        if td.text != '' and td.text in itemUnit:
             prev.find_by_tag('input').fill(itemCount)
             log.write(f"ADDED: {logString}\n")
             found = True

@@ -17,6 +17,8 @@ FILE = 'march 27-april 2.xlsx'
 UNITS = {'EACH': {'DISK', 'EACH'},
         'BTL': 'BOTTLE',
         'GAL': 'GALLON'}
+MIN_ROW = 6
+MAX_ROW = 115
 WEB_SERVICE = 'firefox'
 
 if WEB_SERVICE == 'chrome':
@@ -24,9 +26,6 @@ if WEB_SERVICE == 'chrome':
     browser = Browser('chrome', service=CHROME_SERVICE)
 else:
     browser = Browser()
-
-wb = load_workbook(filename = f"{PATH}/{FILE}")
-sheet = wb.active
 
 log = open(f"{PATH}/log.txt", 'a')
 log.truncate(0)
@@ -40,8 +39,9 @@ def find_and_click(items, search_type, search_text = ''):
     for item in items:
         if search_type == 'text' and item.text == search_text or search_type == 'visible' and item.visible:
             item.click()
-            break
-
+            return True
+        
+    return False
 class Item:
     def __str__(self):
         return f"{self.itemCode : <12}{self.itemDesc : <30}{self.itemCount} {self.itemUnit}"
@@ -53,7 +53,7 @@ class Item:
                     if not cell.value: return False
                     self.itemCode = cell.value.strip()
                 case "B":
-                    self.itemDesc = cell.value.strip()
+                    self.itemDesc = cell.value.strip().replace('\t', '')
                 case "C":
                     self.itemUnit = cell.value.strip()
                     self.itemUnit = UNITS[self.itemUnit] if self.itemUnit in UNITS else self.itemUnit
@@ -75,6 +75,9 @@ class Item:
         return False
 
 if __name__ == '__main__':
+    wb = load_workbook(filename = f"{PATH}/{FILE}")
+    sheet = wb.active
+
     # Visit portal and log in
     browser.visit(URL)
     browser.driver.maximize_window()
@@ -114,10 +117,10 @@ if __name__ == '__main__':
     wait_for_load()
 
     # Cycle through spreadsheet and enter data
-    for row in sheet.iter_rows(min_row=6, max_row=115, min_col=0, max_col=8):
+    for row in sheet.iter_rows(min_row=MIN_ROW, max_row=MAX_ROW, min_col=0, max_col=8):
         item = Item()
         if not item.parse_row(row): continue
-      
+
         logText = f"ADDED: {item}\n" if item.enter_data() else f"\nERROR: {item}  WAS NOT FOUND\n\n"
         log.write(logText)
 

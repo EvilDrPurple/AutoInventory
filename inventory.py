@@ -1,4 +1,5 @@
 import pathlib
+import re
 import time
 from datetime import datetime
 
@@ -12,7 +13,6 @@ from webdriver_manager.chrome import ChromeDriverManager
 URL = 'https://fedsso.yum.com/idp/startSSO.ping?PartnerSpId=https://yumph.altametrics.com/'
 USER = config.USER
 PASS = config.PASS
-DATE = '04/02/2023'
 FREQ = 'Weekly'
 PATH = pathlib.Path(__file__).parent.resolve().__str__()
 FILE = 'march 27-april 2.xlsx'
@@ -20,28 +20,37 @@ UNITS = {'EACH': {'DISK', 'EACH'},
         'BTL': 'BOTTLE',
         'GAL': 'GALLON'}
 MIN_ROW = 6
-MAX_ROW = 6
+MAX_ROW = 115
 WEB_SERVICE = 'firefox'
 
-if WEB_SERVICE == 'chrome':
-    CHROME_SERVICE = ChromeService(ChromeDriverManager().install())
-    browser = Browser('chrome', service=CHROME_SERVICE)
-else:
-    browser = Browser()
 
-log = open(f"{PATH}/log.txt", 'a')
+def get_date():
+    date = input("Enter inventory date (mm/dd/yyyy): ")
+
+    while not re.search('^(1[0-2]|0?[1-9])/(0?[1-9]|[1-2]\d|3[0-1])/\d{4}$', date):
+        print('Invalid date')
+        date = input("Enter inventory date (mm/dd/yyyy): ")
+
+    return date
+
 
 def wait_for_load():
     while browser.find_by_id('loading_layer').visible:
         time.sleep(0.5)
 
-def find_and_click(items, search_type, search_text = ''):
+
+def find_and_click(items, search_type, search_text=''):
     for item in items:
-        if search_type == 'text' and item.text == search_text or search_type == 'visible' and item.visible:
+        if (
+            search_type == 'text' and item.text == search_text
+            or search_type == 'visible' and item.visible
+        ):
             item.click()
             return True
         
     return False
+
+
 class Item:
     def __str__(self):
         return f"{self.itemCode : <12}{self.itemDesc : <30}{self.itemCount} {self.itemUnit}"
@@ -74,13 +83,23 @@ class Item:
 
         return False
 
+
 if __name__ == '__main__':
+    log = open(f"{PATH}/log.txt", 'a')
     log.truncate(0)
     log.write(f"{datetime.now():%A %B %-d, %Y %-I:%M %p}\n")
     log.write('Log start\n\n')
 
-    wb = load_workbook(filename = f"{PATH}/{FILE}")
+    wb = load_workbook(filename=f"{PATH}/{FILE}", read_only=True)
     sheet = wb.active
+
+    DATE = get_date()
+
+    if WEB_SERVICE == 'chrome':
+        CHROME_SERVICE = ChromeService(ChromeDriverManager().install())
+        browser = Browser('chrome', service=CHROME_SERVICE)
+    else:
+        browser = Browser()
 
     # Visit portal and log in
     browser.visit(URL)

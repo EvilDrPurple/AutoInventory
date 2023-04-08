@@ -1,10 +1,12 @@
 import pathlib
 import time
+from datetime import datetime
+
 import config
 from openpyxl import load_workbook
-from splinter import Browser
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
+from splinter import Browser
 from webdriver_manager.chrome import ChromeDriverManager
 
 URL = 'https://fedsso.yum.com/idp/startSSO.ping?PartnerSpId=https://yumph.altametrics.com/'
@@ -18,7 +20,7 @@ UNITS = {'EACH': {'DISK', 'EACH'},
         'BTL': 'BOTTLE',
         'GAL': 'GALLON'}
 MIN_ROW = 6
-MAX_ROW = 115
+MAX_ROW = 6
 WEB_SERVICE = 'firefox'
 
 if WEB_SERVICE == 'chrome':
@@ -28,8 +30,6 @@ else:
     browser = Browser()
 
 log = open(f"{PATH}/log.txt", 'a')
-log.truncate(0)
-log.write("Log start\n\n")
 
 def wait_for_load():
     while browser.find_by_id('loading_layer').visible:
@@ -75,6 +75,10 @@ class Item:
         return False
 
 if __name__ == '__main__':
+    log.truncate(0)
+    log.write(f"{datetime.now():%A %B %-d, %Y %-I:%M %p}\n")
+    log.write('Log start\n\n')
+
     wb = load_workbook(filename = f"{PATH}/{FILE}")
     sheet = wb.active
 

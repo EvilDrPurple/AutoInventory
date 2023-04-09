@@ -5,10 +5,10 @@ from datetime import datetime
 
 import config
 from openpyxl import load_workbook
-from selenium import webdriver
+#from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from splinter import Browser
-from webdriver_manager.chrome import ChromeDriverManager
+#from webdriver_manager.chrome import ChromeDriverManager
 
 URL = 'https://fedsso.yum.com/idp/startSSO.ping?PartnerSpId=https://yumph.altametrics.com/'
 USER = config.USER
@@ -21,7 +21,7 @@ UNITS = {'EACH': {'DISK', 'EACH'},
         'GAL': 'GALLON'}
 MIN_ROW = 6
 MAX_ROW = 115
-WEB_SERVICE = 'firefox'
+LEGACY = False
 
 
 def get_date():
@@ -95,8 +95,8 @@ if __name__ == '__main__':
 
     DATE = get_date()
 
-    if WEB_SERVICE == 'chrome':
-        CHROME_SERVICE = ChromeService(ChromeDriverManager().install())
+    if LEGACY:
+        CHROME_SERVICE = ChromeService(executable_path=f"{PATH}/chromedriver_win32/chromedriver")
         browser = Browser('chrome', service=CHROME_SERVICE)
     else:
         browser = Browser()

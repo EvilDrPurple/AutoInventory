@@ -19,9 +19,10 @@ FILE = 'march 27-april 2.xlsx'
 UNITS = {'EACH': {'DISK', 'EACH'},
         'BTL': 'BOTTLE',
         'GAL': 'GALLON'}
-MIN_ROW = 6
-MAX_ROW = 115
+MIN_ROW = 74
+MAX_ROW = 75
 LEGACY = False
+BROWSER_NAME = 'firefox'
 
 
 def get_date():
@@ -63,8 +64,13 @@ class Item:
                     self.itemCode = cell.value.strip()
                 case "B":
                     self.itemDesc = cell.value.strip().replace('\t', '')
+                    # Adjustment for Pepsi gallons
+                    self.itemCode = 'V62 Syrup' if self.itemDesc == 'BNB PEPSI 5 GL SYRUP' else self.itemCode
+                    self.itemCode = 'V65 Syrup' if self.itemDesc == 'BNB PEPSI 3 GL SYRUP' else self.itemCode
                 case "C":
                     self.itemUnit = cell.value.strip()
+                    # Adjustment for oregano
+                    self.itemUnit = 'CASE' if self.itemCode == '74727' else self.itemUnit
                     self.itemUnit = UNITS[self.itemUnit] if self.itemUnit in UNITS else self.itemUnit
                 case "H":
                     if not cell.value: return False
@@ -99,7 +105,7 @@ if __name__ == '__main__':
         CHROME_SERVICE = ChromeService(executable_path=f"{PATH}/chromedriver_win32/chromedriver")
         browser = Browser('chrome', service=CHROME_SERVICE)
     else:
-        browser = Browser()
+        browser = Browser(BROWSER_NAME)
 
     # Visit portal and log in
     browser.visit(URL)

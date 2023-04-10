@@ -19,8 +19,9 @@ FILE = 'march 27-april 2.xlsx'
 UNITS = {'EACH': {'DISK', 'EACH'},
         'BTL': 'BOTTLE',
         'GAL': 'GALLON'}
-MIN_ROW = 74
-MAX_ROW = 75
+MIN_ROW = 6
+MAX_ROW = 115
+NEW_INV = True
 LEGACY = False
 BROWSER_NAME = 'firefox'
 
@@ -129,19 +130,28 @@ if __name__ == '__main__':
     find_and_click(items=tags, search_type='text', search_text='Inventory')
 
     wait_for_load()
+    
+    if NEW_INV:
+        # Add new inventory sheet
+        browser.find_by_id('ADD_ACTION').click()
+        browser.find_by_css('.selectBox-arrow').last.click()
+        links = browser.find_by_tag('li').links.find_by_text(FREQ)
+        find_and_click(items=links, search_type='visible')
+        browser.fill('DATE_1', DATE)
+        browser.find_by_value('Add').click()
+    else:
+        # Find correct inventory sheet
+        browser.find_by_css('.controls').click()
+        links = browser.find_by_tag('li').links.find_by_text(FREQ)
+        find_and_click(items=links, search_type='visible')
+        browser.fill('DATE_2', DATE)
+        browser.fill('DATE_3', DATE)
+        browser.find_by_value('GO').click()
 
-    # Find correct inventory sheet
-    browser.find_by_css('.controls').click()
-    links = browser.find_by_tag('li').links.find_by_text(FREQ)
-    find_and_click(items=links, search_type='visible')
-    browser.find_by_name('DATE_2').fill(DATE)
-    browser.find_by_name('DATE_3').fill(DATE)
-    browser.find_by_value('GO').click()
+        wait_for_load()
 
-    wait_for_load()
-
-    links = browser.find_by_name('openObject')
-    find_and_click(items=links, search_type='visible')
+        links = browser.find_by_name('openObject')
+        find_and_click(items=links, search_type='visible')
 
     wait_for_load()
 

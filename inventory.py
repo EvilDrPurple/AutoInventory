@@ -4,6 +4,7 @@ import time
 from datetime import datetime
 
 import config
+import traceback
 import PySimpleGUI as sg
 from openpyxl import load_workbook
 from openpyxl.cell.read_only import EmptyCell
@@ -27,14 +28,40 @@ LEGACY = False
 BROWSER_NAME = 'firefox'
 
 
-def get_date():
-    date = input("Enter inventory date (mm/dd/yyyy): ")
+def startup_gui():
+    sg.theme('DarkBlue4')   
+    FONT = 'Ariel 14'
+    TOOLTIP = 'Uncheck this option if there is already an existing inventory sheet for the specified date and frequency in eResturant'
 
-    while not re.search('^(1[0-2]|0?[1-9])/(0?[1-9]|[1-2]\d|3[0-1])/\d{4}$', date):
-        print('Invalid date')
-        date = input("Enter inventory date (mm/dd/yyyy): ")
+    layout = [  [sg.Text('Select count frequency:', font=FONT), sg.Push(), sg.OptionMenu(values=['Daily', 'Weekly', 'Monthly'], default_value='Weekly', key='-FREQ-')],
+                [sg.Text('Enter date (mm/dd/yyyy):', font=FONT), sg.Push(), sg.Input(key='-DATE-', size=12), sg.CalendarButton(button_text='Select Date', target='-DATE-', format='%m/%d/%Y')],
+                [sg.Text('Select inventory spreadsheet:', font=FONT)],
+                [sg.Input(key='-FILE-', size=50), sg.FileBrowse(file_types=(('Microsoft Excel Spreadsheet', '*.xlsx'),))],
+                [sg.Push(), sg.Checkbox('Create new inventory sheet', font=FONT, default=True, key='-NEW_INV-', tooltip=TOOLTIP), sg.Push()],
+                [sg.Text()],
+                [sg.Push(), sg.Ok(font=FONT), sg.Cancel(font=FONT), sg.Push()] ]
 
-    return date
+
+    window = sg.Window('AutoInventory - v0.3', layout)
+
+    while True:
+        event, values = window.read()
+
+        if event == sg.WIN_CLOSED or event == 'Cancel':
+            break
+
+        if not vali_date(values['-DATE-']):
+            sg.popup('Please enter a valid date', title='Invalid date', font=FONT, keep_on_top=True)
+        elif not values['-FILE-'] or not values['-FILE-'].endswith('.xlsx'):
+            sg.popup('Please select a valid file', title='Invalid file', font=FONT, keep_on_top=True)
+        else:
+            return values['-FREQ-'], values['-DATE-'], values['-FILE-'], values['-NEW_INV-']
+
+    window.close()
+
+
+def vali_date(date):
+    return re.search('^(1[0-2]|0?[1-9])/(0?[1-9]|[1-2]\d|3[0-1])/\d{4}$', date)
 
 
 def wait_for_load():
@@ -97,22 +124,12 @@ class Item:
         return False
 
 
-if __name__ == '__main__':
-    log = open(f"{PATH}/log.txt", 'a')
-    log.truncate(0)
+def main():
     log.write(f"{datetime.now().strftime('%A %B %-d, %Y %-I:%M %p')}\n")
     log.write('Log start\n\n')
 
     wb = load_workbook(filename=f"{PATH}/{FILE}", read_only=True)
     sheet = wb.active
-
-    DATE = get_date()
-
-    if LEGACY:
-        CHROME_SERVICE = ChromeService(executable_path=f"{PATH}/chromedriver_win32/chromedriver")
-        browser = Browser('chrome', service=CHROME_SERVICE)
-    else:
-        browser = Browser(BROWSER_NAME)
 
     # Visit portal and log in
     browser.visit(URL)
@@ -177,5 +194,24 @@ if __name__ == '__main__':
 
         browser.find_by_text('OK').click()
 
-    log.write("\nLog closed")
-    log.close()
+
+if __name__ == '__main__':
+    log = open(f"{PATH}/log.txt", 'a')
+    log.truncate(0)
+
+    try:
+        DATE = get_date()
+
+        if LEGACY:
+            CHROME_SERVICE = ChromeService(executable_path=f"{PATH}/chromedriver_win32/chromedriver")
+            browser = Browser('chrome', service=CHROME_SERVICE)
+        else:
+            browser = Browser(BROWSER_NAME)
+
+        main()
+    except Exception as e:
+        log.write(f"{str(e)}\n")
+        log.write(f"{traceback.format_exc()}")
+    finally:
+        log.write("\nLog closed")
+        log.close()

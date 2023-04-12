@@ -15,7 +15,7 @@ USER = config.USER
 PASS = config.PASS
 FREQ = 'Weekly'
 PATH = pathlib.Path(__file__).parent.resolve().__str__()
-FILE = 'march 27-april 2.xlsx'
+FILE = 'sweek end 3-9 april.xlsx'
 UNITS = {'EACH': {'DISK', 'EACH'},
         'BTL': 'BOTTLE',
         'GAL': 'GALLON'}
@@ -55,6 +55,9 @@ def find_and_click(items, search_type, search_text=''):
 
 
 class Item:
+    def __init__(self):
+        self.item_code = None
+
     def __str__(self):
         return f"{self.item_code : <12}{self.item_desc : <30}{self.item_count} {self.item_unit}"
 
@@ -97,7 +100,7 @@ class Item:
 if __name__ == '__main__':
     log = open(f"{PATH}/log.txt", 'a')
     log.truncate(0)
-    log.write(f"{datetime.now():%A %B %-d, %Y %-I:%M %p}\n")
+    log.write(f"{datetime.now().strftime('%A %B %-d, %Y %-I:%M %p')}\n")
     log.write('Log start\n\n')
 
     wb = load_workbook(filename=f"{PATH}/{FILE}", read_only=True)

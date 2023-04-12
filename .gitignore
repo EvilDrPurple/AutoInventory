@@ -5,3 +5,6 @@ __pycache__/
 test.py
 .~lock.*
 geckodriver.log
+inventory.spec
+dist/
+build/

@@ -6,11 +6,9 @@ from datetime import datetime
 import config
 import PySimpleGUI as sg
 from openpyxl import load_workbook
-#from selenium import webdriver
+from openpyxl.cell.read_only import EmptyCell
 from selenium.webdriver.chrome.service import Service as ChromeService
 from splinter import Browser
-
-#from webdriver_manager.chrome import ChromeDriverManager
 
 URL = 'https://fedsso.yum.com/idp/startSSO.ping?PartnerSpId=https://yumph.altametrics.com/'
 USER = config.USER
@@ -21,10 +19,10 @@ FILE = 'march 27-april 2.xlsx'
 UNITS = {'EACH': {'DISK', 'EACH'},
         'BTL': 'BOTTLE',
         'GAL': 'GALLON'}
-MIN_ROW = 54
-MAX_ROW = 54
+MIN_ROW = 6
+MAX_ROW = 115
 NEW_INV = False
-AUTO_SAVE = True
+AUTO_SAVE = False
 LEGACY = False
 BROWSER_NAME = 'firefox'
 
@@ -62,6 +60,7 @@ class Item:
 
     def parse_row(self, row):
         for cell in row:
+            if type(cell) is EmptyCell: continue
             match cell.column_letter:
                 case 'A':
                     if not cell.value: return False
@@ -80,6 +79,7 @@ class Item:
                     if not cell.value: return False
                     self.item_count = cell.value
 
+        if not self.item_code: return False
         return True
     
     def enter_data(self):

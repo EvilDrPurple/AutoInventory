@@ -14,15 +14,12 @@ from splinter import Browser
 URL = 'https://fedsso.yum.com/idp/startSSO.ping?PartnerSpId=https://yumph.altametrics.com/'
 USER = config.USER
 PASS = config.PASS
-FREQ = 'Weekly'
 PATH = pathlib.Path(__file__).parent.resolve().__str__()
-FILE = 'sweek end 3-9 april.xlsx'
 UNITS = {'EACH': {'DISK', 'EACH'},
         'BTL': 'BOTTLE',
         'GAL': 'GALLON'}
 MIN_ROW = 6
 MAX_ROW = 115
-NEW_INV = False
 AUTO_SAVE = False
 LEGACY = False
 BROWSER_NAME = 'firefox'
@@ -52,9 +49,10 @@ def startup_gui():
 
         if not vali_date(values['-DATE-']):
             sg.popup('Please enter a valid date', title='Invalid date', font=FONT, keep_on_top=True)
-        elif not values['-FILE-'] or not values['-FILE-'].endswith('.xlsx'):
+        elif not values['-FILE-'].endswith('.xlsx'):
             sg.popup('Please select a valid file', title='Invalid file', font=FONT, keep_on_top=True)
         else:
+            window.close()
             return values['-FREQ-'], values['-DATE-'], values['-FILE-'], values['-NEW_INV-']
 
     window.close()
@@ -128,7 +126,7 @@ def main():
     log.write(f"{datetime.now().strftime('%A %B %-d, %Y %-I:%M %p')}\n")
     log.write('Log start\n\n')
 
-    wb = load_workbook(filename=f"{PATH}/{FILE}", read_only=True)
+    wb = load_workbook(filename=FILE, read_only=True)
     sheet = wb.active
 
     # Visit portal and log in
@@ -200,7 +198,7 @@ if __name__ == '__main__':
     log.truncate(0)
 
     try:
-        DATE = get_date()
+        FREQ, DATE, FILE, NEW_INV = startup_gui()
 
         if LEGACY:
             CHROME_SERVICE = ChromeService(executable_path=f"{PATH}/chromedriver_win32/chromedriver")

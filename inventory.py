@@ -26,15 +26,18 @@ BROWSER_NAME = 'firefox'
 
 
 def startup_gui():
-    sg.theme('DarkBlue4')   
+    sg.theme('DarkPurple4')   
     FONT = 'Ariel 14'
     TOOLTIP = 'Uncheck this option if there is already an existing inventory sheet for the specified date and frequency in eResturant'
+    OPTION_MENU = sg.OptionMenu(['Daily', 'Weekly', 'Monthly'], default_value='Weekly', key='-FREQ-')
+    CALENDAR_BUTTON = sg.CalendarButton('Select Date', target='-DATE-', format='%m/%d/%Y')
+    CHECKBOX = sg.Checkbox('Create new inventory sheet', font=FONT, text_color='white', default=True, key='-NEW_INV-', tooltip=TOOLTIP)
 
-    layout = [  [sg.Text('Select count frequency:', font=FONT), sg.Push(), sg.OptionMenu(values=['Daily', 'Weekly', 'Monthly'], default_value='Weekly', key='-FREQ-')],
-                [sg.Text('Enter date (mm/dd/yyyy):', font=FONT), sg.Push(), sg.Input(key='-DATE-', size=12), sg.CalendarButton(button_text='Select Date', target='-DATE-', format='%m/%d/%Y')],
-                [sg.Text('Select inventory spreadsheet:', font=FONT)],
-                [sg.Input(key='-FILE-', size=50), sg.FileBrowse(file_types=(('Microsoft Excel Spreadsheet', '*.xlsx'),))],
-                [sg.Push(), sg.Checkbox('Create new inventory sheet', font=FONT, default=True, key='-NEW_INV-', tooltip=TOOLTIP), sg.Push()],
+    layout = [  [sg.Text('Select count frequency:', font=FONT, text_color='white'), sg.Push(), OPTION_MENU],
+                [sg.Text('Enter date (mm/dd/yyyy):', font=FONT, text_color='white'), sg.Push(), sg.Input(key='-DATE-', size=12), CALENDAR_BUTTON],
+                [sg.Text('Select inventory spreadsheet:', font=FONT, text_color='white')],
+                [sg.Input(key='-FILE-', size=50), sg.FileBrowse(file_types=(('Microsoft Excel Worksheet (.xlsx)', '*.xlsx'),))],
+                [sg.Push(), CHECKBOX, sg.Push()],
                 [sg.Text()],
                 [sg.Push(), sg.Ok(font=FONT), sg.Cancel(font=FONT), sg.Push()] ]
 
@@ -47,9 +50,9 @@ def startup_gui():
             break
 
         if not vali_date(values['-DATE-']):
-            sg.popup('Please enter a valid date', title='Invalid date', font=FONT, keep_on_top=True)
+            sg.popup('Please enter a valid date', title='Invalid date', font=FONT, text_color='white', keep_on_top=True)
         elif not values['-FILE-'].endswith('.xlsx'):
-            sg.popup('Please select a valid file', title='Invalid file', font=FONT, keep_on_top=True)
+            sg.popup('Please select a valid file', title='Invalid file', font=FONT, text_color='white', keep_on_top=True)
         else:
             window.close()
             return values['-FREQ-'], values['-DATE-'], values['-FILE-'], values['-NEW_INV-']
@@ -193,12 +196,15 @@ def main():
 
 
 if __name__ == '__main__':
+    try:
+        FREQ, DATE, FILE, NEW_INV = startup_gui()
+    except TypeError:
+        quit()
+
     log = open(f"{PATH}/log.txt", 'a')
     log.truncate(0)
 
     try:
-        FREQ, DATE, FILE, NEW_INV = startup_gui()
-
         if LEGACY:
             CHROME_SERVICE = ChromeService(executable_path=f"{PATH}/chromedriver_win32/chromedriver")
             browser = Browser(BROWSER_NAME, service=CHROME_SERVICE)
@@ -207,6 +213,7 @@ if __name__ == '__main__':
 
         main()
     except Exception as e:
+        traceback.print_exc()
         log.write(f"{str(e)}\n")
         log.write(f"{traceback.format_exc()}")
     finally:

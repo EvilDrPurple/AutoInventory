@@ -1,4 +1,4 @@
-import pathlib
+from pathlib import Path
 import re
 import time
 from datetime import datetime
@@ -14,7 +14,7 @@ from splinter import Browser
 URL = 'https://fedsso.yum.com/idp/startSSO.ping?PartnerSpId=https://yumph.altametrics.com/'
 USER = config.USER
 PASS = config.PASS
-PATH = pathlib.Path(__file__).parent.resolve().__str__()
+PATH = Path(__file__).resolve()
 UNITS = {'EACH': {'DISK', 'EACH'},
         'BTL': 'BOTTLE',
         'GAL': 'GALLON'}
@@ -202,12 +202,12 @@ if __name__ == '__main__':
     except TypeError:
         quit()
 
-    log = open(f"{PATH}/log.txt", 'a')
+    log = open('log.txt', 'a')
     log.truncate(0)
 
     try:
         if LEGACY:
-            CHROME_SERVICE = ChromeService(executable_path=f"{PATH}/chromedriver_win32/chromedriver")
+            CHROME_SERVICE = ChromeService()
             browser = Browser(BROWSER_NAME, service=CHROME_SERVICE)
         else:
             browser = Browser(BROWSER_NAME)

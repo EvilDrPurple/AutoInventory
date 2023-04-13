@@ -38,7 +38,6 @@ def startup_gui():
                 [sg.Text()],
                 [sg.Push(), sg.Ok(font=FONT), sg.Cancel(font=FONT), sg.Push()] ]
 
-
     window = sg.Window('AutoInventory - v0.3', layout)
 
     while True:
@@ -123,7 +122,7 @@ class Item:
 
 
 def main():
-    log.write(f"{datetime.now().strftime('%A %B %-d, %Y %-I:%M %p')}\n")
+    log.write(f"{datetime.now().strftime('%A %B %d, %Y %I:%M %p')}\n")
     log.write('Log start\n\n')
 
     wb = load_workbook(filename=FILE, read_only=True)
@@ -202,7 +201,7 @@ if __name__ == '__main__':
 
         if LEGACY:
             CHROME_SERVICE = ChromeService(executable_path=f"{PATH}/chromedriver_win32/chromedriver")
-            browser = Browser('chrome', service=CHROME_SERVICE)
+            browser = Browser(BROWSER_NAME, service=CHROME_SERVICE)
         else:
             browser = Browser(BROWSER_NAME)
 
@@ -213,3 +212,4 @@ if __name__ == '__main__':
     finally:
         log.write("\nLog closed")
         log.close()
+        browser.quit()

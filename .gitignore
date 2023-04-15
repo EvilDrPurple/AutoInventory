@@ -1,4 +1,5 @@
 config.py
+config.ini
 log.txt
 __pycache__/
 *.xlsx

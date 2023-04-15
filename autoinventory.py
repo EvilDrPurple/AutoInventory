@@ -54,14 +54,18 @@ def startup_gui():
             break
 
         if not vali_date(values['-DATE-']):
-            sg.popup('Please enter a valid date', title='Invalid date', font=FONT, keep_on_top=True)
+            popup('Please enter a valid date', title='Invalid date')
         elif not values['-FILE-'].endswith('.xlsx'):
-            sg.popup('Please select a valid file', title='Invalid file', font=FONT, keep_on_top=True)
+            popup('Please select a valid file', title='Invalid file')
         else:
             window.close()
             return values['-FREQ-'], values['-DATE-'], values['-FILE-'], values['-NEW_INV-']
 
     window.close()
+
+
+def popup(text, title):
+    sg.popup(text, title=title, font='Ariel 14', keep_on_top=True)
 
 
 def vali_date(date):

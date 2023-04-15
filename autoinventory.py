@@ -1,28 +1,31 @@
-from pathlib import Path
+import configparser
 import re
 import time
-from datetime import datetime
-
-import config
 import traceback
+from datetime import datetime
+from pathlib import Path
+
 import PySimpleGUI as sg
 from openpyxl import load_workbook
 from openpyxl.cell.read_only import EmptyCell
 from selenium.webdriver.chrome.service import Service as ChromeService
 from splinter import Browser
 
+config = configparser.ConfigParser()
+config.read('config.ini')
+
 URL = 'https://fedsso.yum.com/idp/startSSO.ping?PartnerSpId=https://yumph.altametrics.com/'
-USER = config.USER
-PASS = config.PASS
 PATH = Path(__file__).resolve()
 UNITS = {'EACH': {'DISK', 'EACH'},
         'BTL': 'BOTTLE',
         'GAL': 'GALLON'}
-MIN_ROW = 6
-MAX_ROW = 115
-AUTO_SAVE = False
-LEGACY = False
-BROWSER_NAME = 'firefox'
+USER = config['Login Details']['username']
+PASS = config['Login Details']['password']
+MIN_ROW = config.getint('Important Things', 'min_row')
+MAX_ROW = config.getint('Important Things', 'max_row')
+AUTO_SAVE = config.getboolean('Important Things', 'auto_save')
+LEGACY = config.getboolean('Important Things', 'legacy')
+BROWSER_NAME = config['Important Things']['browser']
 
 
 def startup_gui():
@@ -37,7 +40,7 @@ def startup_gui():
     layout = [  [sg.Text('Select count frequency:', font=FONT), sg.Push(), OPTION_MENU],
                 [sg.Text('Enter date (mm/dd/yyyy):', font=FONT), sg.Push(), sg.Input(key='-DATE-', size=12), CALENDAR_BUTTON],
                 [sg.Text('Select inventory spreadsheet:', font=FONT)],
-                [sg.Input(key='-FILE-', size=50), sg.FileBrowse(file_types=(('Microsoft Excel Worksheet (.xlsx)', '*.xlsx'),))],
+                [sg.Input(key='-FILE-', size=50), sg.FileBrowse(file_types=(('Microsoft Excel Worksheet', '*.xlsx'),))],
                 [sg.Push(), CHECKBOX, sg.Push()],
                 [sg.Text()],
                 [sg.Push(), sg.Ok(font=FONT), sg.Cancel(font=FONT), sg.Push()] ]

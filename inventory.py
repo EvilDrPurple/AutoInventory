@@ -205,13 +205,13 @@ if __name__ == '__main__':
     log = open('log.txt', 'a')
     log.truncate(0)
 
-    try:
-        if LEGACY:
-            CHROME_SERVICE = ChromeService()
-            browser = Browser(BROWSER_NAME, service=CHROME_SERVICE)
-        else:
-            browser = Browser(BROWSER_NAME)
+    if LEGACY:
+        CHROME_SERVICE = ChromeService()
+        browser = Browser(BROWSER_NAME, service=CHROME_SERVICE)
+    else:
+        browser = Browser(BROWSER_NAME)
 
+    try:
         main()
     except Exception as e:
         traceback.print_exc()

@@ -3,8 +3,8 @@ import re
 import time
 import traceback
 from datetime import datetime
-from pathlib import Path
 
+from exceptions import LoginFailedException
 import PySimpleGUI as sg
 from openpyxl import load_workbook
 from openpyxl.cell.read_only import EmptyCell
@@ -14,8 +14,8 @@ from splinter import Browser
 config = configparser.ConfigParser()
 config.read('config.ini')
 
+VERSION = '0.4'
 URL = 'https://fedsso.yum.com/idp/startSSO.ping?PartnerSpId=https://yumph.altametrics.com/'
-PATH = Path(__file__).resolve()
 UNITS = {'EACH': {'DISK', 'EACH'},
         'BTL': 'BOTTLE',
         'GAL': 'GALLON'}
@@ -45,7 +45,7 @@ def startup_gui():
                 [sg.Text()],
                 [sg.Push(), sg.Ok(font=FONT), sg.Cancel(font=FONT), sg.Push()] ]
 
-    window = sg.Window('AutoInventory - v0.3', layout)
+    window = sg.Window(f"AutoInventory - v{VERSION}", layout)
 
     while True:
         event, values = window.read()
@@ -70,6 +70,19 @@ def popup(text, title):
 
 def vali_date(date):
     return re.search('^(1[0-2]|0?[1-9])/(0?[1-9]|[1-2]\d|3[0-1])/\d{4}$', date)
+
+
+def login():
+    browser.visit(URL)
+    browser.driver.maximize_window()
+    
+    browser.fill('username', USER)
+    browser.fill('PASSWORD', PASS)
+    browser.find_by_id('submit').click()
+
+    if 'pkmslogin' in browser.url and browser.find_by_id('errorMSG').visible:
+        popup('Please update your login information in the config file', title='Login Failed')
+        raise LoginFailedException(USER)
 
 
 def wait_for_load():
@@ -140,11 +153,7 @@ def main():
     sheet = wb.active
 
     # Visit portal and log in
-    browser.visit(URL)
-    browser.driver.maximize_window()
-    browser.fill('username', USER)
-    browser.fill('PASSWORD', PASS)
-    browser.find_by_id('submit').click()
+    login()
 
     # Wait for redirect
     while not browser.url.endswith('erslaunch-app'):
@@ -220,10 +229,12 @@ if __name__ == '__main__':
 
     try:
         main()
+    except LoginFailedException as e:
+        log.write(e.message)
     except Exception as e:
         traceback.print_exc()
         log.write(f"{str(e)}\n")
-        log.write(f"{traceback.format_exc()}")
+        log.write(traceback.format_exc())
     finally:
         log.write("\nLog closed")
         log.close()

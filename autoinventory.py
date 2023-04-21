@@ -47,6 +47,8 @@ def startup_gui():
 
     window = sg.Window(f"AutoInventory - v{VERSION}", layout)
 
+    vali_date = lambda date : re.search('^(1[0-2]|0?[1-9])/(0?[1-9]|[1-2]\d|3[0-1])/\d{4}$', date)
+
     while True:
         event, values = window.read()
 
@@ -66,10 +68,6 @@ def startup_gui():
 
 def popup(text, title):
     sg.popup(text, title=title, font='Ariel 14', keep_on_top=True)
-
-
-def vali_date(date):
-    return re.search('^(1[0-2]|0?[1-9])/(0?[1-9]|[1-2]\d|3[0-1])/\d{4}$', date)
 
 
 def login():
@@ -204,6 +202,7 @@ def main():
         log.write(log_text)
     
     if AUTO_SAVE:
+        # Save inventory sheet
         buttons = browser.find_by_value('Save')
         find_and_click(buttons, search_type='visible')
 
@@ -211,6 +210,7 @@ def main():
 
         browser.find_by_text('OK').click()
 
+    popup('Be sure to check the log file and any warnings in eResturant before posting', title='Saved successfully')
 
 if __name__ == '__main__':
     try:

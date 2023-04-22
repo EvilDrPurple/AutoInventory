@@ -14,7 +14,7 @@ from splinter import Browser
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-VERSION = '0.4'
+VERSION = '0.5'
 URL = 'https://fedsso.yum.com/idp/startSSO.ping?PartnerSpId=https://yumph.altametrics.com/'
 UNITS = {'EACH': {'DISK', 'EACH'},
         'BTL': 'BOTTLE',
@@ -100,6 +100,38 @@ def find_and_click(items, search_type, search_text=''):
     return False
 
 
+def create_inventory_sheet():
+    browser.find_by_id('ADD_ACTION').click()
+    browser.find_by_css('.selectBox-arrow').last.click()
+    links = browser.find_by_tag('li').links.find_by_text(FREQ)
+    find_and_click(links, search_type='visible')
+    browser.fill('DATE_1', DATE)
+    browser.find_by_value('Add').click()
+
+
+def open_inventory_sheet():
+    browser.find_by_css('.controls').click()
+    links = browser.find_by_tag('li').links.find_by_text(FREQ)
+    find_and_click(links, search_type='visible')
+    browser.fill('DATE_2', DATE)
+    browser.fill('DATE_3', DATE)
+    browser.find_by_value('GO').click()
+
+    wait_for_load()
+
+    links = browser.find_by_name('openObject')
+    find_and_click(links, search_type='visible')
+
+
+def save_inventory_sheet():
+    buttons = browser.find_by_value('Save')
+    find_and_click(buttons, search_type='visible')
+
+    wait_for_load()
+
+    browser.find_by_text('OK').click()
+
+
 class Item:
     def __init__(self):
         self.item_code = None
@@ -169,27 +201,8 @@ def main():
 
     wait_for_load()
     
-    if NEW_INV:
-        # Add new inventory sheet
-        browser.find_by_id('ADD_ACTION').click()
-        browser.find_by_css('.selectBox-arrow').last.click()
-        links = browser.find_by_tag('li').links.find_by_text(FREQ)
-        find_and_click(links, search_type='visible')
-        browser.fill('DATE_1', DATE)
-        browser.find_by_value('Add').click()
-    else:
-        # Find correct inventory sheet
-        browser.find_by_css('.controls').click()
-        links = browser.find_by_tag('li').links.find_by_text(FREQ)
-        find_and_click(links, search_type='visible')
-        browser.fill('DATE_2', DATE)
-        browser.fill('DATE_3', DATE)
-        browser.find_by_value('GO').click()
-
-        wait_for_load()
-
-        links = browser.find_by_name('openObject')
-        find_and_click(links, search_type='visible')
+    # Create or open inventory sheet
+    create_inventory_sheet() if NEW_INV else open_inventory_sheet()
 
     wait_for_load()
 
@@ -201,14 +214,7 @@ def main():
         log_text = f"ADDED: {item}\n" if item.enter_data() else f"\nERROR: {item}  WAS NOT FOUND\n\n"
         log.write(log_text)
     
-    if AUTO_SAVE:
-        # Save inventory sheet
-        buttons = browser.find_by_value('Save')
-        find_and_click(buttons, search_type='visible')
-
-        wait_for_load()
-
-        browser.find_by_text('OK').click()
+    if AUTO_SAVE: save_inventory_sheet()
 
     popup('Be sure to check the log file and any warnings in eResturant before posting', title='Saved successfully')
 

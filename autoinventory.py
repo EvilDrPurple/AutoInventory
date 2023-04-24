@@ -5,7 +5,7 @@ import traceback
 from datetime import datetime
 
 import PySimpleGUI as sg
-from exceptions import LoginFailedException, UserCancelledException
+from exceptions import LoginFailedError, UserCancelled
 from openpyxl import load_workbook
 from openpyxl.cell.read_only import EmptyCell
 from selenium.webdriver.chrome.service import Service as ChromeService
@@ -80,7 +80,7 @@ def login():
 
     if 'pkmslogin' in browser.url and browser.find_by_id('errorMSG').visible:
         popup('Please update your login information in the config file', title='Login Failed')
-        raise LoginFailedException(USER)
+        raise LoginFailedError(USER)
 
 
 def wait_for_load():
@@ -127,7 +127,7 @@ def open_inventory_sheet():
         if result == 'Yes':
             create_inventory_sheet()
         else: 
-            raise UserCancelledException()
+            raise UserCancelled()
 
 
 def save_inventory_sheet():
@@ -242,7 +242,7 @@ if __name__ == '__main__':
 
     try:
         main()
-    except (LoginFailedException, UserCancelledException) as e:
+    except (LoginFailedError, UserCancelled) as e:
         log.write(e.message)
     except Exception as e:
         traceback.print_exc()

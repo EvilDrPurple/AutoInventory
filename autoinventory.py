@@ -4,8 +4,8 @@ import time
 import traceback
 from datetime import datetime
 
-from exceptions import LoginFailedException
 import PySimpleGUI as sg
+from exceptions import LoginFailedException, UserCancelledException
 from openpyxl import load_workbook
 from openpyxl.cell.read_only import EmptyCell
 from selenium.webdriver.chrome.service import Service as ChromeService
@@ -66,8 +66,8 @@ def startup_gui():
     window.close()
 
 
-def popup(text, title):
-    sg.popup(text, title=title, font='Ariel 14', keep_on_top=True)
+def popup(text, title, button_type=sg.POPUP_BUTTONS_OK):
+        return sg.popup(text, title=title, button_type=button_type, font='Ariel 14', keep_on_top=True)
 
 
 def login():
@@ -120,7 +120,14 @@ def open_inventory_sheet():
     wait_for_load()
 
     links = browser.find_by_name('openObject')
-    find_and_click(links, search_type='visible')
+    if not find_and_click(links, search_type='visible'):
+        result = popup(f"No {FREQ} inventory was found for the date {DATE}\nWould you like to create one?",
+                       title='Unable to find inventory', button_type=sg.POPUP_BUTTONS_YES_NO)
+        
+        if result == 'Yes':
+            create_inventory_sheet()
+        else: 
+            raise UserCancelledException()
 
 
 def save_inventory_sheet():
@@ -235,7 +242,7 @@ if __name__ == '__main__':
 
     try:
         main()
-    except LoginFailedException as e:
+    except (LoginFailedException, UserCancelledException) as e:
         log.write(e.message)
     except Exception as e:
         traceback.print_exc()

@@ -10,6 +10,7 @@ from openpyxl import load_workbook
 from openpyxl.cell.read_only import EmptyCell
 from selenium.webdriver.chrome.service import Service as ChromeService
 from splinter import Browser
+from splinter.exceptions import ElementDoesNotExist
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -84,9 +85,11 @@ def login():
 
 
 def wait_for_load():
-    while browser.find_by_id('loading_layer').visible:
+    try:
+        if browser.find_by_id('loading_layer').is_visible(0.5): wait_for_load()
+    except (ElementDoesNotExist, IndexError):
         time.sleep(0.5)
-
+        wait_for_load()
 
 def find_and_click(items, search_type, search_text=''):
     for item in items:
@@ -108,6 +111,18 @@ def create_inventory_sheet():
     browser.fill('DATE_1', DATE)
     browser.find_by_value('Add').click()
 
+    wait_for_load()
+
+    if browser.find_by_id('pop_msg').is_visible(0.5):
+        result = popup(f"{FREQ} inventory sheet already exists for the date {DATE}\nWould you like to use it?",
+                       title='Inventory sheet already exists', button_type=sg.POPUP_BUTTONS_YES_NO)
+        
+        if result == 'Yes':
+            browser.find_by_text('OK').click()
+            open_inventory_sheet()
+        else: 
+            raise UserCancelled()
+
 
 def open_inventory_sheet():
     browser.find_by_css('.controls').click()
@@ -121,8 +136,8 @@ def open_inventory_sheet():
 
     links = browser.find_by_name('openObject')
     if not find_and_click(links, search_type='visible'):
-        result = popup(f"No {FREQ} inventory was found for the date {DATE}\nWould you like to create one?",
-                       title='Unable to find inventory', button_type=sg.POPUP_BUTTONS_YES_NO)
+        result = popup(f"No {FREQ} inventory sheet was found for the date {DATE}\nWould you like to create one?",
+                       title='Unable to find inventory sheet', button_type=sg.POPUP_BUTTONS_YES_NO)
         
         if result == 'Yes':
             create_inventory_sheet()
@@ -193,8 +208,7 @@ def main():
     login()
 
     # Wait for redirect
-    while not browser.url.endswith('erslaunch-app'):
-        time.sleep(1)
+    while not browser.url.endswith('erslaunch-app'): time.sleep(1)
 
     # Navigate to inventory page
     tags = browser.find_by_tag('h3')
@@ -209,7 +223,8 @@ def main():
     wait_for_load()
     
     # Create or open inventory sheet
-    create_inventory_sheet() if NEW_INV else open_inventory_sheet()
+    try: create_inventory_sheet() if NEW_INV else open_inventory_sheet()
+    except (IndexError, ElementDoesNotExist): pass
 
     wait_for_load()
 
@@ -224,6 +239,7 @@ def main():
     if AUTO_SAVE: save_inventory_sheet()
 
     popup('Be sure to check the log file and any warnings in eResturant before posting', title='Saved successfully')
+
 
 if __name__ == '__main__':
     try:
@@ -243,12 +259,12 @@ if __name__ == '__main__':
     try:
         main()
     except (LoginFailedError, UserCancelled) as e:
-        log.write(e.message)
+        log.write(e.message + '\n')
     except Exception as e:
         traceback.print_exc()
-        log.write(f"{str(e)}\n")
+        log.write(str(e) + '\n')
         log.write(traceback.format_exc())
     finally:
-        log.write("\nLog closed")
+        log.write('\nLog closed')
         log.close()
         browser.quit()

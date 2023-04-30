@@ -22,3 +22,15 @@ Now the process is like this:
 2. Enter the numbers into an Excel spreadsheet
 3. Run AutoInventory and watch the magic happen!
 
+I created a functioning prototype for this script after a couple days of research and testing followed by one day of work.
+I have been polishing it ever since.
+
+## What AutoInventory does and how it does it
+
+## Future plans
+
+- Password hashing so that the eResturant password is not stored in plaintext
+- Allow the user to modify what columns in the spreadsheet the data will be read from. This will allow for any spreadsheet layout to be used as long as the 4 columns are accounted for
+- Create an instruction text file for setting up and running the program
+- Possibly add a logo to the GUI
+- Fix a bug where the program can't tell the difference between what message is popping up. In rare cases when the previous inventory sheet has not been posted this will cause a crash because the program will think the message says the created inventory sheet already exists

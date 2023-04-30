@@ -27,10 +27,27 @@ I have been polishing it ever since.
 
 ## What AutoInventory does and how it does it
 
+In simple terms, AutoInventory reads a spreadsheet file containing inventory data and enters the data into the eResturant website automatically.
+
+It uses two main libraries to accomplish this:
+
+- [OpenPyXL](https://openpyxl.readthedocs.io/en/stable/index.html) for reading from the spreadsheet
+- [Splinter](https://splinter.readthedocs.io/en/latest/index.html) for browser control automation
+
+Other important libraries include:
+
+- [ConfigParser](https://docs.python.org/3/library/configparser.html) for reading the config file
+- [PySimpleGUI](https://www.pysimplegui.org/en/latest/) for the GUI
+- [PyInstaller](https://pyinstaller.org/en/stable/index.html) for generating the executable
+
 ## Future plans
 
 - Password hashing so that the eResturant password is not stored in plaintext
-- Allow the user to modify what columns in the spreadsheet the data will be read from. This will allow for any spreadsheet layout to be used as long as the 4 columns are accounted for
+- Allow the user to modify what columns in the spreadsheet the data will be read from.
+This will allow for any spreadsheet layout to be used as long as the 4 columns are accounted for
 - Create an instruction text file for setting up and running the program
 - Possibly add a logo to the GUI
-- Fix a bug where the program can't tell the difference between what message is popping up. In rare cases when the previous inventory sheet has not been posted this will cause a crash because the program will think the message says the created inventory sheet already exists
+- Fix a bug where the program can't tell the difference between what message is popping up.
+In rare cases when the previous inventory sheet has not been posted this will cause a crash because the program will think the message says the created inventory sheet already exists
+- Error handling/detection for when the inventory sheet cannot be saved
+- Possibly create some unit tests

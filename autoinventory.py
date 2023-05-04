@@ -30,6 +30,15 @@ BROWSER_NAME = config['Important Things']['browser']
 
 
 def startup_gui():
+    """GUI that runs on program startup.
+
+    Allows the user to specify values for inventory frequency, inventory date, filepath to inventory spreadsheet,
+    and whether a new inventory sheet should be created.
+
+    Returns:
+        tuple(str, str, str, bool): A tuple that contains user-specified values of frequency, date, filepath, and new_inv.
+    """
+
     sg.theme('DarkPurple4')
     sg.theme_text_color('white')
     FONT = 'Ariel 14'
@@ -68,10 +77,27 @@ def startup_gui():
 
 
 def popup(text, title, button_type=sg.POPUP_BUTTONS_OK):
-        return sg.popup(text, title=title, button_type=button_type, font='Ariel 14', keep_on_top=True)
+    """Displays a popup window.
+
+    Args:
+        text (string): Message to display.
+        title (string): Title of the popup window.
+        button_type (int, optional): Button layout type. Defaults to sg.POPUP_BUTTONS_OK.
+
+    Returns:
+        str | None: Text of the button that was pressed or None if closed.
+    """
+
+    return sg.popup(text, title=title, button_type=button_type, font='Ariel 14', keep_on_top=True)
 
 
 def login():
+    """Visits and logs into the eResturant website.
+
+    Raises:
+        LoginFailedError: If the login fails.
+    """
+
     browser.visit(URL)
     browser.driver.maximize_window()
     
@@ -85,6 +111,8 @@ def login():
 
 
 def wait_for_load():
+    """Waits for the page to load."""    
+
     try:
         if browser.find_by_id('loading_layer').is_visible(0.5): wait_for_load()
     except (ElementDoesNotExist, IndexError):
@@ -92,6 +120,20 @@ def wait_for_load():
         wait_for_load()
 
 def find_and_click(items, search_type, search_text=''):
+    """Finds and clicks on specified object
+
+    This function was created because sometimes the find_by functions of splinter would be unable to find an element or finds an undesired element.
+    This function corrects the problem by searching through an element's text or by only clicking on elements that are visible.
+
+    Args:
+        items (ElementList): List of elements to search through.
+        search_type (str): Determines search behavior, either 'text' or 'visible'.
+        search_text (str, optional): Text to search for, only valid when search_type is 'text'. Defaults to ''.
+
+    Returns:
+        bool: True if an element is found, False otherwise.
+    """
+
     for item in items:
         if (
             search_type == 'text' and item.text == search_text
@@ -104,6 +146,15 @@ def find_and_click(items, search_type, search_text=''):
 
 
 def create_inventory_sheet():
+    """Creates a new inventory sheet in eResturant.
+
+    If an inventory sheet already exists for the specified date and frequency, a popup will appear asking if the user
+    would like to use the existing inventory sheet. If yes, open_inventory_sheet() will be called.
+
+    Raises:
+        UserCancelled: If user cancels in popup window.
+    """
+
     browser.find_by_id('ADD_ACTION').click()
     browser.find_by_css('.selectBox-arrow').last.click()
     links = browser.find_by_tag('li').links.find_by_text(FREQ)
@@ -125,6 +176,15 @@ def create_inventory_sheet():
 
 
 def open_inventory_sheet():
+    """Opens an inventory sheet in eResturant.
+
+    If an inventory sheet does not exists for the specified date and frequency, a popup will appear asking if the user
+    would like to create a new inventory sheet. If yes, create_inventory_sheet() will be called.
+
+    Raises:
+        UserCancelled: If user cancels in popup window.
+    """
+
     browser.find_by_css('.controls').click()
     links = browser.find_by_tag('li').links.find_by_text(FREQ)
     find_and_click(links, search_type='visible')
@@ -146,6 +206,8 @@ def open_inventory_sheet():
 
 
 def save_inventory_sheet():
+    """Clicks on the save button"""
+
     buttons = browser.find_by_value('Save')
     find_and_click(buttons, search_type='visible')
 
@@ -155,6 +217,15 @@ def save_inventory_sheet():
 
 
 class Item:
+    """Contains relevant information for inventory item.
+
+    Attributes:
+        item_code (str): Item code or id.\n
+        item_desc (str): Item description or name.\n
+        item_unit (str): Item unit such as LB.\n
+        item_count (str): Item quantity.\n
+    """
+
     def __init__(self):
         self.item_code = None
 
@@ -162,6 +233,15 @@ class Item:
         return f"{self.item_code : <12}{self.item_desc : <30}{self.item_count} {self.item_unit}"
 
     def parse_row(self, row):
+        """Stores data from a given row of cells in the object's attributes.
+
+        Args:
+            row (list): List of Cell objects for the current row.
+
+        Returns:
+            bool: True if row is valid and all relevant date is accounted for, False otherwise.
+        """
+
         for cell in row:
             if type(cell) is EmptyCell: continue
             match cell.column_letter:
@@ -174,18 +254,25 @@ class Item:
                     self.item_code = 'V62 Syrup' if self.item_desc == 'BNB PEPSI 5 GL SYRUP' else self.item_code
                     self.item_code = 'V65 Syrup' if self.item_desc == 'BNB PEPSI 3 GL SYRUP' else self.item_code
                 case 'C':
+                    if not cell.value: return False
                     self.item_unit = cell.value.strip()
                     # Adjustment for oregano
                     self.item_unit = 'CASE' if self.item_code == '74727' else self.item_unit
                     self.item_unit = UNITS[self.item_unit] if self.item_unit in UNITS else self.item_unit
                 case 'H':
                     if not cell.value: return False
-                    self.item_count = cell.value
+                    self.item_count = cell.value.strip()
 
         if not self.item_code: return False
         return True
     
     def enter_data(self):
+        """Searches for item_code and enters the item_count into the proper field using item_unit.
+
+        Returns:
+            bool: True if the item_count is successfully entered, False otherwise.
+        """
+
         browser.find_by_id('INV_ACC_DETAIL_tbl_filter').find_by_tag('input').fill(self.item_code)
 
         for td in browser.find_by_id('INV_ACC_DETAIL_tbl').find_by_tag('td'):

@@ -51,3 +51,16 @@ This will allow for any spreadsheet layout to be used as long as the 4 columns a
 In rare cases when the previous inventory sheet has not been posted this will cause a crash because the program will think the message says the created inventory sheet already exists
 - Error handling/detection for when the inventory sheet cannot be saved
 - Possibly create some unit tests
+- Possibly allow users to create their own exceptional behavior for certain items (such as searching for a different code than what is provided or using a different unit).
+Though this may be complicated and difficult for the user to understand how it works
+- Possibly create a setup GUI
+- Default date to most recent Sunday/End of most recent month
+- Detection for when the username and password are not set
+- Investigate possible problem that could arrise when waiting for page to load
+- Maybe replace find_and_click function parameter with booleans instead of a string
+- Change 'items' to 'elements' in relation to find_and_click
+- More error handling in the event that find_and_click fails
+- Add more comments on what specifically is being clicked on at each part
+- Make units case insensitive
+- Maybe something that detects if there are warnings in eResturant
+- Maybe automated updates

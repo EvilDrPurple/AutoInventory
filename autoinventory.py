@@ -261,7 +261,7 @@ class Item:
                     self.item_unit = UNITS[self.item_unit] if self.item_unit in UNITS else self.item_unit
                 case 'H':
                     if not cell.value: return False
-                    self.item_count = cell.value.strip()
+                    self.item_count = str(cell.value).strip()
 
         if not self.item_code: return False
         return True

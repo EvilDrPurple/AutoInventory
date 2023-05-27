@@ -42,25 +42,28 @@ Other important libraries include:
 
 ## Future plans
 
-- Password hashing so that the eResturant password is not stored in plaintext
-- Allow the user to modify what columns in the spreadsheet the data will be read from.
+- [ ] Password hashing so that the eResturant password is not stored in plaintext
+- [ ] Allow the user to modify what columns in the spreadsheet the data will be read from.
 This will allow for any spreadsheet layout to be used as long as the 4 columns are accounted for
-- Create an instruction text file for setting up and running the program
-- Possibly add a logo to the GUI
-- Fix a bug where the program can't tell the difference between what message is popping up.
-In rare cases when the previous inventory sheet has not been posted this will cause a crash because the program will think the message says the created inventory sheet already exists
-- Error handling/detection for when the inventory sheet cannot be saved
-- Possibly create some unit tests
-- Possibly allow users to create their own exceptional behavior for certain items (such as searching for a different code than what is provided or using a different unit).
+- [ ] Create an instruction text file for setting up and running the program
+- [ ] Add the logo to the GUI
+- [ ] Fix a bug where the program can't tell the difference between what message is popping up.
+In cases where the previous inventory sheet has not been posted this will cause a crash because the program will think the message says the created inventory sheet already exists
+- [ ] Error handling/detection for when the inventory sheet cannot be saved
+- [ ] Create a setup GUI
+- [ ] Settings menu GUI for updating username/password and other things
+- [ ] Default date to most recent Sunday/End of most recent month
+- [ ] Detection for when the username and password are not set
+- [ ] Investigate possible problem that could arrise when waiting for page to load
+- [ ] Change 'items' to 'elements' in relation to find_and_click
+- [ ] More error handling in the event that find_and_click fails
+- [ ] Add more comments on what specifically is being clicked on at each part
+- [ ] Make units case insensitive
+- [ ] Automated updates
+- [ ] Hide command prompt window
+- [ ] (Maybe) replace find_and_click function parameters with booleans instead of a string
+- [ ] (Maybe) create some unit tests
+- [ ] (Maybe) allow users to create their own exceptional behavior for certain items
+(such as searching for a different code than what is provided or using a different unit).
 Though this may be complicated and difficult for the user to understand how it works
-- Possibly create a setup GUI
-- Default date to most recent Sunday/End of most recent month
-- Detection for when the username and password are not set
-- Investigate possible problem that could arrise when waiting for page to load
-- Maybe replace find_and_click function parameter with booleans instead of a string
-- Change 'items' to 'elements' in relation to find_and_click
-- More error handling in the event that find_and_click fails
-- Add more comments on what specifically is being clicked on at each part
-- Make units case insensitive
-- Maybe something that detects if there are warnings in eResturant
-- Maybe automated updates
+- [ ] (Maybe) add something that detects if there are warnings in eResturant

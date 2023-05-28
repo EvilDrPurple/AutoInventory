@@ -52,6 +52,7 @@ In cases where the previous inventory sheet has not been posted this will cause 
 - [ ] Error handling/detection for when the inventory sheet cannot be saved
 - [ ] Create a setup GUI
 - [ ] Settings menu GUI for updating username/password and other things
+- [ ] The settings menu automatically opens if your eResturant password has changed
 - [ ] Default date to most recent Sunday/End of most recent month
 - [ ] Detection for when the username and password are not set
 - [ ] Investigate possible problem that could arrise when waiting for page to load
@@ -59,6 +60,7 @@ In cases where the previous inventory sheet has not been posted this will cause 
 - [ ] More error handling in the event that find_and_click fails
 - [ ] Add more comments on what specifically is being clicked on at each part
 - [ ] Make units case insensitive
+- [ ] Installer
 - [ ] Automated updates
 - [ ] Hide command prompt window
 - [ ] (Maybe) replace find_and_click function parameters with booleans instead of a string

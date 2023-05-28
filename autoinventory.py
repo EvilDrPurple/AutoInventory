@@ -15,7 +15,7 @@ from splinter.exceptions import ElementDoesNotExist
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-VERSION = '0.5'
+VERSION = open('VERSION.txt', 'r').readline()
 URL = 'https://fedsso.yum.com/idp/startSSO.ping?PartnerSpId=https://yumph.altametrics.com/'
 UNITS = {'EACH': {'DISK', 'EACH'},
         'BTL': 'BOTTLE',

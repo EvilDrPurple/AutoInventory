@@ -17,7 +17,7 @@ from exceptions import LoginFailedError, UserCancelled
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-VERSION = open('VERSION.txt', 'r').readline()
+VERSION = open('VERSION.txt', 'r').readline().strip()
 URL = 'https://fedsso.yum.com/idp/startSSO.ping?PartnerSpId=https://yumph.altametrics.com/'
 UNITS = {'EACH': {'DISK', 'EACH'},
         'BTL': 'BOTTLE',
@@ -33,7 +33,7 @@ BROWSER_NAME = config['Important Things']['browser']
 
 def update_program():
     VERSION_URL = 'https://raw.githubusercontent.com/EvilDrPurple/AutoInventory/master/VERSION.txt'
-    REMOTE_VERSION = requests.get(VERSION_URL)
+    REMOTE_VERSION = str(requests.get(VERSION_URL))
 
     if (REMOTE_VERSION > VERSION):
         pass

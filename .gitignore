@@ -8,3 +8,4 @@ inventory.spec
 dist/
 build/
 c
+config.ini

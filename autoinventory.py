@@ -5,12 +5,14 @@ import traceback
 from datetime import datetime
 
 import PySimpleGUI as sg
-from exceptions import LoginFailedError, UserCancelled
+import requests
 from openpyxl import load_workbook
 from openpyxl.cell.read_only import EmptyCell
 from selenium.webdriver.chrome.service import Service as ChromeService
 from splinter import Browser
 from splinter.exceptions import ElementDoesNotExist
+
+from exceptions import LoginFailedError, UserCancelled
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -27,6 +29,14 @@ MAX_ROW = config.getint('Important Things', 'max_row')
 AUTO_SAVE = config.getboolean('Important Things', 'auto_save')
 LEGACY = config.getboolean('Important Things', 'legacy')
 BROWSER_NAME = config['Important Things']['browser']
+
+
+def update_program():
+    VERSION_URL = 'https://raw.githubusercontent.com/EvilDrPurple/AutoInventory/master/VERSION.txt'
+    REMOTE_VERSION = requests.get(VERSION_URL)
+
+    if (REMOTE_VERSION > VERSION):
+        pass
 
 
 def startup_gui():
@@ -329,6 +339,8 @@ def main():
 
 
 if __name__ == '__main__':
+    update_program()
+
     try:
         FREQ, DATE, FILE, NEW_INV = startup_gui()
     except TypeError:

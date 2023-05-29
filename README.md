@@ -60,9 +60,12 @@ In cases where the previous inventory sheet has not been posted this will cause 
 - [ ] More error handling in the event that find_and_click fails
 - [ ] Add more comments on what specifically is being clicked on at each part
 - [ ] Make units case insensitive
-- [ ] Installer
+- [x] Installer
 - [ ] Automated updates
 - [ ] Hide command prompt window
+- [ ] Internalize VERSION file
+- [ ] Future proof the updater so that it can update itself if need be
+- [ ] Ability for the updater to update the config if new fields are added while keeping information intact
 - [ ] (Maybe) replace find_and_click function parameters with booleans instead of a string
 - [ ] (Maybe) create some unit tests
 - [ ] (Maybe) allow users to create their own exceptional behavior for certain items

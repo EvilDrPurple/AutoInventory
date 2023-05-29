@@ -3,7 +3,7 @@
 ; Generates install script for Windows 10
 
 #define MyAppName "AutoInventory"
-#define MyAppVersion "0.5"
+#define MyAppVersion "0.5.2"
 #define MyAppPublisher "Scott"
 #define MyAppExeName "AutoInventory.exe"
 #define DirDrive "E"
@@ -37,7 +37,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "{#DirDrive}:\AutoInventory\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#DirDrive}:\AutoInventory\config.ini"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#DirDrive}:\AutoInventory\config.ini"; DestDir: "{app}"; Flags: onlyifdoesntexist
+Source: "{#DirDrive}:\AutoInventory\VERSION.txt"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

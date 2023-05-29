@@ -39,6 +39,7 @@ Other important libraries include:
 - [ConfigParser](https://docs.python.org/3/library/configparser.html) for reading the config file
 - [PySimpleGUI](https://www.pysimplegui.org/en/latest/) for the GUI
 - [PyInstaller](https://pyinstaller.org/en/stable/index.html) for generating the executable
+- [Inno Setup](https://jrsoftware.org/isinfo.php) for generating the installer
 
 ## Future plans
 
@@ -61,11 +62,13 @@ In cases where the previous inventory sheet has not been posted this will cause 
 - [ ] Add more comments on what specifically is being clicked on at each part
 - [ ] Make units case insensitive
 - [x] Installer
+- [ ] Windows 7 installer
 - [ ] Automated updates
 - [ ] Hide command prompt window
 - [ ] Internalize VERSION file
 - [ ] Future proof the updater so that it can update itself if need be
 - [ ] Ability for the updater to update the config if new fields are added while keeping information intact
+- [ ] (Maybe) Revamp/modernize the GUI
 - [ ] (Maybe) replace find_and_click function parameters with booleans instead of a string
 - [ ] (Maybe) create some unit tests
 - [ ] (Maybe) allow users to create their own exceptional behavior for certain items

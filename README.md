@@ -53,6 +53,7 @@ In cases where the previous inventory sheet has not been posted this will cause 
 - [ ] Error handling/detection for when the inventory sheet cannot be saved
 - [ ] Create a setup GUI
 - [ ] Settings menu GUI for updating username/password and other things
+- [ ] Help menu that explains certain settings and behavior
 - [ ] The settings menu automatically opens if your eResturant password has changed
 - [ ] Default date to most recent Sunday/End of most recent month
 - [ ] Detection for when the username and password are not set
@@ -64,10 +65,12 @@ In cases where the previous inventory sheet has not been posted this will cause 
 - [x] Installer
 - [ ] Windows 7 installer
 - [ ] Automated updates
+- [ ] Make the updater actually detect if there's a new version available rather than just changing a text file on remote
 - [ ] Hide command prompt window
 - [ ] Internalize VERSION file
 - [ ] Future proof the updater so that it can update itself if need be
 - [ ] Ability for the updater to update the config if new fields are added while keeping information intact
+- [ ] Config reorganization
 - [ ] (Maybe) Revamp/modernize the GUI
 - [ ] (Maybe) replace find_and_click function parameters with booleans instead of a string
 - [ ] (Maybe) create some unit tests

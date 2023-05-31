@@ -65,6 +65,12 @@ In cases where the previous inventory sheet has not been posted this will cause 
 - [x] Installer
 - [ ] Windows 7 installer
 - [ ] Automated updates
+  - [x] Create script
+  - [ ] Compress that one series of elifs in the script
+  - [ ] Update.exe PyInstaller script
+  - [ ] Add exe to installer
+  - [ ] Implement exe into the main program
+  - [ ] Windows 7 support for updater
 - [ ] Make the updater actually detect if there's a new version available rather than just changing a text file on remote
 - [ ] Hide command prompt window
 - [ ] Internalize VERSION file

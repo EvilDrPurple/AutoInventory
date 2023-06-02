@@ -4,8 +4,9 @@ __pycache__/
 test.py
 .~lock.*
 geckodriver.log
-inventory.spec
 dist/
 build/
 c
 config.ini
+*.spec
+Setup Scripts/Inno Setup/AutoInventory-Installer.exe

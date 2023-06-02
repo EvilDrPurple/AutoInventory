@@ -1,12 +1,16 @@
 import os
 import tempfile
 import time
+import configparser
 
 import PySimpleGUI as sg
 import wget
 
-DOWNLOAD_URL = 'https://github.com/EvilDrPurple/AutoInventory/releases/latest/download/AutoInventory-Installer.exe'
-INSTALLER_PATH = f"{tempfile.gettempdir()}/AutoInventory-Installer.exe"
+LEGACY = config.getboolean('Important Things', 'legacy')
+WIN7 = '-win7' if LEGACY else ''
+
+DOWNLOAD_URL = f"https://github.com/EvilDrPurple/AutoInventory/releases/latest/download/AutoInventory-Installer{WIN7}.exe"
+INSTALLER_PATH = f"{tempfile.gettempdir()}/AutoInventory-Installer{WIN7}.exe"
 
 THREAD_KEY = '-THREAD-'
 DL_START_KEY = '-START DOWNLOAD-'

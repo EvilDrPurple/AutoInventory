@@ -6,7 +6,7 @@
 #define MyAppVersion "0.5.3"
 #define MyAppPublisher "Scott"
 #define MyAppExeName "AutoInventory.exe"
-#define DirDrive "E"
+#define Dir "E:\AutoInventory"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
@@ -21,9 +21,9 @@ DisableProgramGroupPage=yes
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 PrivilegesRequired=lowest
 ;PrivilegesRequiredOverridesAllowed=dialog
-OutputDir={#DirDrive}:\AutoInventory\Inno Setup
+OutputDir={#Dir}\Setup Scripts\Inno Setup
 OutputBaseFilename=AutoInventory-Installer
-SetupIconFile={#DirDrive}:\AutoInventory\pizza_hut_logo.ico
+SetupIconFile={#Dir}\pizza_hut_logo.ico
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
@@ -36,9 +36,9 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "{#DirDrive}:\AutoInventory\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#DirDrive}:\AutoInventory\config.ini"; DestDir: "{app}"; Flags: onlyifdoesntexist
-Source: "{#DirDrive}:\AutoInventory\VERSION.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#Dir}\Setup Scripts\dist\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#Dir}\config.ini"; DestDir: "{app}"; Flags: onlyifdoesntexist
+Source: "{#Dir}\VERSION.txt"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

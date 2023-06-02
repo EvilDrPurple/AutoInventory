@@ -63,11 +63,12 @@ In cases where the previous inventory sheet has not been posted this will cause 
 - [ ] Add more comments on what specifically is being clicked on at each part
 - [ ] Make units case insensitive
 - [x] Installer
-- [ ] Windows 7 installer
+  - [ ] Windows 7 installer
+  - [ ] Add README to installer
 - [ ] Automated updates
   - [x] Create script
   - [ ] Compress that one series of elifs in the script
-  - [ ] Update.exe PyInstaller script
+  - [x] Update.exe PyInstaller script
   - [ ] Add exe to installer
   - [ ] Implement exe into the main program
   - [ ] Windows 7 support for updater
@@ -84,3 +85,4 @@ In cases where the previous inventory sheet has not been posted this will cause 
 (such as searching for a different code than what is provided or using a different unit).
 Though this may be complicated and difficult for the user to understand how it works
 - [ ] (Maybe) add something that detects if there are warnings in eResturant
+- [ ] (Maybe) do some CI/CX shenanigans

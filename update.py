@@ -22,6 +22,13 @@ IN_START_KEY = '-START INSTALL-'
 IN_END_KEY = '-END INSTALL-'
 THREAD_EXITING = '-THREAD EXITING-'
 
+DICT = {
+    DL_START_KEY: 'Downloading installer...',
+    DL_END_KEY: 'Downloaded',
+    IN_START_KEY: 'Installing update...',
+    IN_END_KEY: 'Installed successfully!'
+}
+
 def the_thread(window:sg.Window):
     window.write_event_value((THREAD_KEY, DL_START_KEY), 1)
     wget.download(DOWNLOAD_URL, INSTALLER_PATH)
@@ -54,14 +61,8 @@ def main():
             break
  
         if event[0] == THREAD_KEY:
-            if event[1] == DL_START_KEY:
-                window[STATUS].print('Downloading installer...')
-            elif event[1] == DL_END_KEY:
-                window[STATUS].print('Downloaded')
-            elif event[1] == IN_START_KEY:
-                window[STATUS].print('Installing update...')
-            elif event[1] == IN_END_KEY:
-                window[STATUS].print('Installed successfully!')
+            if event[1] in DICT:
+                window[STATUS].print(DICT[event[1]])
             elif event[1] == THREAD_EXITING:
                 break
 

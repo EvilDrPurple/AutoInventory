@@ -66,7 +66,7 @@ In cases where the previous inventory sheet has not been posted this will cause 
   - [x] Add README to installer
 - [ ] Automated updates
   - [x] Create script
-  - [ ] Compress that one series of elifs in the script
+  - [x] Compress that one series of elifs in the script
   - [x] Update.exe PyInstaller script
   - [x] Add exe to installer
   - [x] Implement exe into the main program

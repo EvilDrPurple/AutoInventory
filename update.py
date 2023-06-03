@@ -6,6 +6,9 @@ import configparser
 import PySimpleGUI as sg
 import wget
 
+config = configparser.ConfigParser()
+config.read('config.ini')
+
 LEGACY = config.getboolean('Important Things', 'legacy')
 WIN7 = '-win7' if LEGACY else ''
 

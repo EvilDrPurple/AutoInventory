@@ -1,3 +1,4 @@
+import os
 import configparser
 import re
 import time
@@ -36,7 +37,8 @@ def update_program():
     REMOTE_VERSION = str(requests.get(VERSION_URL))
 
     if (REMOTE_VERSION > VERSION):
-        pass
+        os.system('update.exe')
+        sys.exit()
 
 
 def startup_gui():
@@ -344,7 +346,7 @@ if __name__ == '__main__':
     try:
         FREQ, DATE, FILE, NEW_INV = startup_gui()
     except TypeError:
-        quit()
+        sys.exit()
 
     log = open('log.txt', 'a')
     log.truncate(0)

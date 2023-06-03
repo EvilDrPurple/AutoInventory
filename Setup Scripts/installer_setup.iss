@@ -37,6 +37,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "{#Dir}\Setup Scripts\dist\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#Dir}\Setup Scripts\dist\update.exe"; DestDir: "{app}"; Flags: onlyifdoesntexist
 Source: "{#Dir}\config.ini"; DestDir: "{app}"; Flags: onlyifdoesntexist
 Source: "{#Dir}\VERSION.txt"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files

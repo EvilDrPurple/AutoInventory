@@ -1,5 +1,6 @@
 import os
 import sys
+import subprocess
 import configparser
 import re
 import time
@@ -38,7 +39,7 @@ def update_program():
     REMOTE_VERSION = requests.get(VERSION_URL).text.strip()
 
     if (REMOTE_VERSION > VERSION):
-        os.system('update.exe')
+        subprocess.Popen('update.exe')
         sys.exit()
 
 

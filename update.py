@@ -30,7 +30,7 @@ def the_thread(window:sg.Window):
     time.sleep(1)
     
     window.write_event_value((THREAD_KEY, IN_START_KEY), 3)
-    os.system(f'"{INSTALLER_PATH}" /SILENT /SUPPRESSMSGBOXES /NOCANCEL')
+    os.system(f'"{INSTALLER_PATH}" /SILENT /NOCLOSEAPPLICATIONS /SUPRESSMSGBOXES /NOCANCEL')
     
     window.write_event_value((THREAD_KEY, IN_END_KEY), 4)
     os.remove(INSTALLER_PATH)

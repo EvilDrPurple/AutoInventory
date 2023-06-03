@@ -27,8 +27,8 @@ UNITS = {'EACH': {'DISK', 'EACH'},
         'GAL': 'GALLON'}
 USER = config['Login Details']['username']
 PASS = config['Login Details']['password']
-MIN_ROW = config.getint('Important Things', 'min_row')
-MAX_ROW = config.getint('Important Things', 'max_row')
+MIN_ROW = config.getint('Spreadsheet', 'min_row')
+MAX_ROW = config.getint('Spreadsheet', 'max_row')
 AUTO_SAVE = config.getboolean('Important Things', 'auto_save')
 LEGACY = config.getboolean('Important Things', 'legacy')
 BROWSER_NAME = config['Important Things']['browser']

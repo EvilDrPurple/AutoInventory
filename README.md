@@ -46,7 +46,6 @@ Other important libraries include:
 - [ ] Password hashing so that the eResturant password is not stored in plaintext
 - [ ] Allow the user to modify what columns in the spreadsheet the data will be read from.
 This will allow for any spreadsheet layout to be used as long as the 4 columns are accounted for
-- [ ] Create an instruction text file for setting up and running the program
 - [ ] Add the logo to the GUI
 - [ ] Fix a bug where the program can't tell the difference between what message is popping up.
 In cases where the previous inventory sheet has not been posted this will cause a crash because the program will think the message says the created inventory sheet already exists
@@ -72,12 +71,15 @@ In cases where the previous inventory sheet has not been posted this will cause 
   - [x] Add exe to installer
   - [x] Implement exe into the main program
   - [x] Windows 7 support for updater
+  - [ ] Have the updater take LEGACY as a parameter
 - [ ] Make the updater actually detect if there's a new version available rather than just changing a text file on remote
 - [ ] Hide command prompt window
 - [ ] Internalize VERSION file
 - [ ] Future proof the updater so that it can update itself if need be
 - [ ] Ability for the updater to update the config if new fields are added while keeping information intact
-- [ ] Config reorganization
+- [x] Config reorganization
+- [ ] Automatically open log.txt after running
+- [ ] See if using more specific imports will cut down on file size
 - [ ] (Maybe) Revamp/modernize the GUI
 - [ ] (Maybe) replace find_and_click function parameters with booleans instead of a string
 - [ ] (Maybe) create some unit tests
@@ -86,3 +88,4 @@ In cases where the previous inventory sheet has not been posted this will cause 
 Though this may be complicated and difficult for the user to understand how it works
 - [ ] (Maybe) add something that detects if there are warnings in eResturant
 - [ ] (Maybe) do some CI/CX shenanigans
+- [ ] (Maybe) have a status bar that shows what the program is doing and its progress

@@ -64,7 +64,7 @@ In cases where the previous inventory sheet has not been posted this will cause 
 - [ ] Make units case insensitive
 - [x] Installer
   - [ ] Windows 7 installer
-  - [ ] Add README to installer
+  - [x] Add README to installer
 - [ ] Automated updates
   - [x] Create script
   - [ ] Compress that one series of elifs in the script

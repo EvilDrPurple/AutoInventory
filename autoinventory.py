@@ -1,4 +1,5 @@
 import os
+import sys
 import configparser
 import re
 import time
@@ -34,7 +35,7 @@ BROWSER_NAME = config['Important Things']['browser']
 
 def update_program():
     VERSION_URL = 'https://raw.githubusercontent.com/EvilDrPurple/AutoInventory/master/VERSION.txt'
-    REMOTE_VERSION = str(requests.get(VERSION_URL))
+    REMOTE_VERSION = requests.get(VERSION_URL).text.strip()
 
     if (REMOTE_VERSION > VERSION):
         os.system('update.exe')

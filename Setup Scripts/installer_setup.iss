@@ -40,6 +40,7 @@ Source: "{#Dir}\Setup Scripts\dist\{#MyAppExeName}"; DestDir: "{app}"; Flags: ig
 Source: "{#Dir}\Setup Scripts\dist\update.exe"; DestDir: "{app}"; Flags: onlyifdoesntexist
 Source: "{#Dir}\config.ini"; DestDir: "{app}"; Flags: onlyifdoesntexist
 Source: "{#Dir}\VERSION.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#Dir}\README.md"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

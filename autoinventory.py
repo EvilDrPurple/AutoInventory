@@ -39,7 +39,7 @@ def update_program():
     REMOTE_VERSION = requests.get(VERSION_URL).text.strip()
 
     if (REMOTE_VERSION > VERSION):
-        subprocess.Popen('update.exe')
+        subprocess.Popen(f"update.exe {LEGACY}")
         sys.exit()
 
 

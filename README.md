@@ -64,14 +64,14 @@ In cases where the previous inventory sheet has not been posted this will cause 
 - [x] Installer
   - [ ] Windows 7 installer
   - [x] Add README to installer
-- [ ] Automated updates
+- [x] Automated updates
   - [x] Create script
   - [x] Compress that one series of elifs in the script
   - [x] Update.exe PyInstaller script
   - [x] Add exe to installer
   - [x] Implement exe into the main program
   - [x] Windows 7 support for updater
-  - [ ] Have the updater take LEGACY as a parameter
+  - [x] Have the updater take LEGACY as a parameter
 - [ ] Make the updater actually detect if there's a new version available rather than just changing a text file on remote
 - [ ] Hide command prompt window
 - [ ] Internalize VERSION file

@@ -1,8 +1,7 @@
-import os
-import sys
-import subprocess
 import configparser
 import re
+import subprocess
+import sys
 import time
 import traceback
 from datetime import datetime
@@ -35,6 +34,8 @@ BROWSER_NAME = config['Important Things']['browser']
 
 
 def update_program():
+    """Checks for updates to the program, calls the updater executable if one is available."""
+    
     VERSION_URL = 'https://raw.githubusercontent.com/EvilDrPurple/AutoInventory/master/VERSION.txt'
     REMOTE_VERSION = requests.get(VERSION_URL).text.strip()
 

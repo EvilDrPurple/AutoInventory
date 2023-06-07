@@ -44,6 +44,41 @@ def update_program():
         sys.exit()
 
 
+def settings_menu(first_time=False):
+    global USER, PASS
+    FONT = 'Ariel 14'
+    settings_layout = [  [sg.Text('Enter your eResturant login details', font=FONT)],
+            [sg.Text('Username:', font=FONT), sg.Push(), sg.Input(key='-USER-', default_text=USER, size=25)],
+            [sg.Text('Password:', font=FONT), sg.Push(), sg.Input(key='-PASS-', default_text=PASS, size=25)],
+            [sg.Text()],
+            [sg.Push(), sg.Ok(font=FONT), sg.Cancel(font=FONT), sg.Push()] ]
+
+    settings_window = sg.Window('Settings', settings_layout)
+
+    while True:
+        event, values = settings_window.read()
+
+        if event == sg.WIN_CLOSED or event == 'Cancel':
+            settings_window.close()
+            if first_time: break
+            else: return
+
+        if first_time and (not values['-USER-'] or not values['-PASS-']):
+            popup('An eResturant username and password is required', title='Oopsie')
+        else:
+            config['Login Details']['username'] = values['-USER-']
+            config['Login Details']['password'] = values['-PASS-']
+
+            with open('config.ini', 'w') as configfile:
+                config.write(configfile)
+
+            USER, PASS = values['-USER-'], values['-PASS-']
+            settings_window.close()
+            return
+
+    sys.exit()
+
+
 def startup_gui():
     """GUI that runs on program startup.
 
@@ -56,6 +91,9 @@ def startup_gui():
 
     sg.theme('DarkPurple4')
     sg.theme_text_color('white')
+
+    if not USER or not PASS: settings_menu(True)
+
     FONT = 'Ariel 14'
     TOOLTIP = 'Uncheck this option if there is already an existing inventory sheet for the specified date and frequency in eResturant'
     OPTION_MENU = sg.OptionMenu(['Daily', 'Weekly', 'Monthly'], default_value='Weekly', key='-FREQ-')
@@ -235,10 +273,10 @@ class Item:
     """Contains relevant information for inventory item.
 
     Attributes:
-        item_code (str): Item code or id.\n
-        item_desc (str): Item description or name.\n
-        item_unit (str): Item unit such as LB.\n
-        item_count (str): Item quantity.\n
+        item_code (str): Item code or id.
+        item_desc (str): Item description or name.
+        item_unit (str): Item unit such as LB.
+        item_count (str): Item quantity.
     """
 
     def __init__(self):
@@ -344,7 +382,7 @@ def main():
 
 
 if __name__ == '__main__':
-    update_program()
+    #update_program()
 
     try:
         FREQ, DATE, FILE, NEW_INV = startup_gui()

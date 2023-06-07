@@ -58,7 +58,7 @@ def settings_menu(first_time=False):
     while True:
         event, values = settings_window.read()
 
-        if event == sg.WIN_CLOSED or event == 'Cancel':
+        if event in (sg.WIN_CLOSED, 'Cancel'):
             settings_window.close()
             if first_time: break
             else: return
@@ -99,6 +99,8 @@ def startup_gui():
     OPTION_MENU = sg.OptionMenu(['Daily', 'Weekly', 'Monthly'], default_value='Weekly', key='-FREQ-')
     CALENDAR_BUTTON = sg.CalendarButton('Select Date', target='-DATE-', format='%m/%d/%Y')
     CHECKBOX = sg.Checkbox('Create new inventory sheet', font=FONT, default=True, key='-NEW_INV-', tooltip=TOOLTIP)
+    IMAGE_SETTINGS = './Images/settings_button.png'
+    SETTINGS_BUTTON = sg.Button(image_filename=IMAGE_SETTINGS, image_size=(33, 33), image_subsample=3, key='-SETTINGS-')
 
     layout = [  [sg.Text('Select count frequency:', font=FONT), sg.Push(), OPTION_MENU],
                 [sg.Text('Enter date (mm/dd/yyyy):', font=FONT), sg.Push(), sg.Input(key='-DATE-', size=12), CALENDAR_BUTTON],
@@ -106,7 +108,7 @@ def startup_gui():
                 [sg.Input(key='-FILE-', size=50), sg.FileBrowse(file_types=(('Microsoft Excel Worksheet', '*.xlsx'),))],
                 [sg.Push(), CHECKBOX, sg.Push()],
                 [sg.Text()],
-                [sg.Push(), sg.Ok(font=FONT), sg.Cancel(font=FONT), sg.Push()] ]
+                [sg.Push(), sg.Ok(font=FONT), sg.Cancel(font=FONT), sg.Push(), SETTINGS_BUTTON] ]
 
     window = sg.Window(f"AutoInventory - v{VERSION}", layout)
 
@@ -115,10 +117,12 @@ def startup_gui():
     while True:
         event, values = window.read()
 
-        if event == sg.WIN_CLOSED or event == 'Cancel':
+        if event in (sg.WIN_CLOSED, 'Cancel'):
             break
-
-        if not vali_date(values['-DATE-']):
+        
+        if event == '-SETTINGS-':
+            settings_menu()
+        elif not vali_date(values['-DATE-']):
             popup('Please enter a valid date', title='Invalid date')
         elif not values['-FILE-'].endswith('.xlsx'):
             popup('Please select a valid file', title='Invalid file')

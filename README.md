@@ -50,12 +50,12 @@ This will allow for any spreadsheet layout to be used as long as the 4 columns a
 - [ ] Fix a bug where the program can't tell the difference between what message is popping up.
 In cases where the previous inventory sheet has not been posted this will cause a crash because the program will think the message says the created inventory sheet already exists
 - [ ] Error handling/detection for when the inventory sheet cannot be saved
-- [ ] Create a setup GUI
-- [ ] Settings menu GUI for updating username/password and other things
+- [x] Create a setup GUI
+- [x] Settings menu GUI for updating username/password and other things
 - [ ] Help menu that explains certain settings and behavior
 - [ ] The settings menu automatically opens if your eResturant password has changed
 - [ ] Default date to most recent Sunday/End of most recent month
-- [ ] Detection for when the username and password are not set
+- [x] Detection for when the username and password are not set
 - [ ] Investigate possible problem that could arrise when waiting for page to load
 - [ ] Change 'items' to 'elements' in relation to find_and_click
 - [ ] More error handling in the event that find_and_click fails
@@ -73,13 +73,13 @@ In cases where the previous inventory sheet has not been posted this will cause 
   - [x] Windows 7 support for updater
   - [x] Have the updater take LEGACY as a parameter
 - [ ] Make the updater actually detect if there's a new version available rather than just changing a text file on remote
-- [ ] Hide command prompt window
+- [x] Hide command prompt window
 - [ ] Internalize VERSION file
 - [ ] Future proof the updater so that it can update itself if need be
 - [ ] Ability for the updater to update the config if new fields are added while keeping information intact
 - [x] Config reorganization
 - [ ] Automatically open log.txt after running
-- [ ] See if using more specific imports will cut down on file size
+- [ ] Warning if a selected date is far in the past or in the future
 - [ ] (Maybe) Revamp/modernize the GUI
 - [ ] (Maybe) replace find_and_click function parameters with booleans instead of a string
 - [ ] (Maybe) create some unit tests

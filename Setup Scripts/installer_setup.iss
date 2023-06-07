@@ -3,7 +3,7 @@
 ; Generates install script for Windows 10
 
 #define MyAppName "AutoInventory"
-#define MyAppVersion "0.5.3"
+#define MyAppVersion "0.6.0"
 #define MyAppPublisher "Scott"
 #define MyAppExeName "AutoInventory.exe"
 #define Dir "E:\AutoInventory"

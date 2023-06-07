@@ -386,7 +386,7 @@ def main():
 
 
 if __name__ == '__main__':
-    #update_program()
+    update_program()
 
     try:
         FREQ, DATE, FILE, NEW_INV = startup_gui()

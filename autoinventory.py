@@ -414,3 +414,4 @@ if __name__ == '__main__':
         log.write('\nLog closed')
         log.close()
         browser.quit()
+        os.system('notepad log.txt')

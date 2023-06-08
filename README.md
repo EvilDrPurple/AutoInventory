@@ -62,7 +62,7 @@ In cases where the previous inventory sheet has not been posted this will cause 
 - [ ] Add more comments on what specifically is being clicked on at each part
 - [ ] Make units case insensitive
 - [x] Installer
-  - [ ] Windows 7 installer
+  - [x] Windows 7 installer
   - [x] Add README to installer
 - [x] Automated updates
   - [x] Create script
@@ -78,7 +78,7 @@ In cases where the previous inventory sheet has not been posted this will cause 
 - [ ] Future proof the updater so that it can update itself if need be
 - [ ] Ability for the updater to update the config if new fields are added while keeping information intact
 - [x] Config reorganization
-- [ ] Automatically open log.txt after running
+- [x] Automatically open log.txt after running
 - [ ] Warning if a selected date is far in the past or in the future
 - [ ] (Maybe) Revamp/modernize the GUI
 - [ ] (Maybe) replace find_and_click function parameters with booleans instead of a string

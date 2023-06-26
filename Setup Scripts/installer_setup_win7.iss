@@ -3,7 +3,7 @@
 ; Generates install script for Windows 7
 
 #define MyAppName "AutoInventory"
-#define MyAppVersion "0.6.0"
+#define MyAppVersion "0.6.1"
 #define MyAppPublisher "Scott"
 #define MyAppExeName "AutoInventory.exe"
 #define Dir "E:\AutoInventory"
@@ -23,7 +23,7 @@ PrivilegesRequired=lowest
 ;PrivilegesRequiredOverridesAllowed=dialog
 OutputDir={#Dir}\Setup Scripts\Inno Setup
 OutputBaseFilename=AutoInventory-Installer-win7
-SetupIconFile={#Dir}\pizza_hut_logo.ico
+SetupIconFile={#Dir}\Images\pizza_hut_logo.ico
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
@@ -38,7 +38,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 Source: "{#Dir}\Setup Scripts\dist\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#Dir}\Setup Scripts\dist\update.exe"; DestDir: "{app}"; Flags: onlyifdoesntexist
-Source: "{#Dir}\config.ini"; DestDir: "{app}"; Flags: onlyifdoesntexist
+Source: "{#Dir}\config_default_win7.ini"; DestDir: "{app}"; DestName: "config.ini"; Flags: onlyifdoesntexist
 Source: "{#Dir}\VERSION.txt"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#Dir}\README.md"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#Dir}\Images\settings_button.png"; DestDir: "{app}\Images"; Flags: ignoreversion

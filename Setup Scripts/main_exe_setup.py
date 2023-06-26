@@ -7,5 +7,5 @@ PyInstaller.__main__.run([
     '--onefile',
     '--windowed',
     '-nAutoInventory',
-    f'-i{DIR}\\pizza_hut_logo.ico'
+    f'-i{DIR}\\Images\\pizza_hut_logo.ico'
 ])

@@ -82,6 +82,7 @@ In cases where the previous inventory sheet has not been posted this will cause 
 - [ ] Warning if a selected date is far in the past or in the future
 - [ ] Have installer rename and use default configs
 - [ ] Make the units in the log file more concise
+- [ ] Add a sample spreadsheet to the repository
 - [ ] (Maybe) Revamp/modernize the GUI
 - [ ] (Maybe) replace find_and_click function parameters with booleans instead of a string
 - [ ] (Maybe) create some unit tests
